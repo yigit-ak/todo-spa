@@ -1,0 +1,25 @@
+@import "../styles/mixins.scss";
+@import "../styles/theme.scss";
+.task-container {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: $main-gap;
+
+  .header {
+    display: inline-flex;
+    justify-content: space-between;
+    border-bottom: $text-color-passive solid 2px;
+
+    .date {
+      font-size: 75%;
+      color: $text-color-passive;
+    }
+  }
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: $main-gap;
+}

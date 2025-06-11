@@ -1,0 +1,19 @@
+@import "theme";
+@import "typography";
+
+body {
+  background-color: $background-color;
+  color: $text-color-primary;
+
+  margin: 50px 0 0 0;
+
+  display: flex;
+  justify-content: center;
+
+  font-family: $font-family-default;
+  font-size: $font-size-default;
+  font-weight: $font-weight-default;
+  line-height: 100%;
+
+  word-wrap: break-word;
+}

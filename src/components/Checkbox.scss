@@ -1,0 +1,32 @@
+@import "../styles/theme";
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 18px;
+  height: 18px;
+  border-radius: 8px;
+  border: 2px solid $color-primary;
+
+  .tick-icon {
+    display: none;
+  }
+
+  &:hover {
+    .tick-icon {
+      display: inline-block;
+    }
+  }
+}
+
+.completed {
+  .checkbox {
+    border-color: $text-color-passive;
+
+    .tick-icon {
+      display: inline-block;
+      path {fill: $text-color-passive;}
+    }
+  }
+}

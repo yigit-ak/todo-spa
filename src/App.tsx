@@ -1,6 +1,11 @@
-import './App.css'
+import Today from "./pages/Today";
 
-function App() {
+const App = () => {
+  return(
+      <>
+        <Today/>
+      </>
+  );
 }
 
 export default App

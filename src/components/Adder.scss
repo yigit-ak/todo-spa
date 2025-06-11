@@ -1,0 +1,5 @@
+@import "../styles/mixins";
+
+.adder {
+  @include task-container-item;
+}
