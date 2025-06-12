@@ -1,5 +1,30 @@
 @import "../styles/mixins";
+@import "../styles/theme";
 
 .adder {
   @include task-container-item;
+  color: $color-primary;
+  border-color: $color-primary;
+  gap: 10px;
+}
+
+.add-icon {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 18px;
+  height: 18px;
+  border-radius: 8px;
+  border: 2px solid $color-primary;
+  svg {
+    width: 75%;
+    height: 75%;
+  }
+}
+
+.new-task {
+  @include task-container-item;
+  color: $color-primary;
+  border-color: $color-primary;
+  gap: 10px;
 }

@@ -2,11 +2,13 @@
 
 @mixin task-container-item {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   border-radius: 18px;
   cursor: pointer;
   gap: $main-gap;
   padding: 10px;
   user-select: none;
   background-color: transparent;
+  border-width: 2px;
+  border-style: solid;
 }

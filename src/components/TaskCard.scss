@@ -1,0 +1,71 @@
+@import "../styles/theme";
+@import "../styles/mixins";
+
+.task-card {
+  @include task-container-item;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  border-color: $text-color-passive;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.due-date {
+  color: $color-warning;
+  font-size: 50%;
+}
+
+.completed {
+  color: $text-color-passive;
+  //text-decoration: line-through;
+}
+
+.task-title {
+  flex: auto;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  gap: 10px;
+  width: 100%;
+
+  .task-card {
+    padding: 6px 8px;
+    border-radius: 16px;
+  }
+
+  .task-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .checkbox {
+      border-radius: 6px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+.details-recurrence {
+  color: $text-color-passive;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+// todo: check this later
+.task-card:focus,
+.task-card:focus-visible { /* keyboard users */
+  outline: 2px solid #6366f1; /* blue ring */
+  box-shadow: 0 0 0 4px #c7d2fe;
+}

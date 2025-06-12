@@ -1,0 +1,7 @@
+@import "../styles/layout";
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: $main-gap;
+}

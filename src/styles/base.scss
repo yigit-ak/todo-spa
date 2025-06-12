@@ -1,6 +1,10 @@
 @import "theme";
 @import "typography";
 
+* {
+  flex-shrink: 0;
+}
+
 body {
   background-color: $background-color;
   color: $text-color-primary;
@@ -16,4 +20,19 @@ body {
   line-height: 100%;
 
   word-wrap: break-word;
+}
+
+input[type="text"] {
+  font: inherit;
+  color: inherit;
+  background-color: inherit;
+  border: none;
+  flex: auto;
+  white-space-collapse: preserve;
+  text-wrap: wrap;
+  overflow-wrap: break-word;
+
+  &:focus-visible {
+    outline: none;
+  }
 }
