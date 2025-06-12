@@ -2,18 +2,12 @@
 @import "../styles/mixins";
 
 .task-card {
-  @include task-container-item;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
+  @include card;
   border-color: $text-color-passive;
 }
 
 .task-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
+  @include card-header;
 }
 
 .due-date {
@@ -31,11 +25,7 @@
 }
 
 .task-details {
-  display: flex;
-  flex-direction: column;
-  font-size: 16px;
-  gap: 10px;
-  width: 100%;
+  @include card-body;
 
   .task-card {
     padding: 6px 8px;
@@ -64,8 +54,8 @@
 }
 
 // todo: check this later
-.task-card:focus,
-.task-card:focus-visible { /* keyboard users */
-  outline: 2px solid #6366f1; /* blue ring */
-  box-shadow: 0 0 0 4px #c7d2fe;
-}
+//.task-card:focus,
+//.task-card:focus-visible { /* keyboard users */
+//  outline: 2px solid #6366f1; /* blue ring */
+//  box-shadow: 0 0 0 4px #c7d2fe;
+//}

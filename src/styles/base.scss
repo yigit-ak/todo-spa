@@ -22,15 +22,46 @@ body {
   word-wrap: break-word;
 }
 
-input[type="text"] {
+input {
   font: inherit;
   color: inherit;
   background-color: inherit;
   border: none;
-  flex: auto;
-  white-space-collapse: preserve;
-  text-wrap: wrap;
-  overflow-wrap: break-word;
+  border-bottom: solid 2px $color-primary;
+  color-scheme: dark;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &[type="number"] {
+    width: 3em;
+  }
+
+  &[type="text"] {
+    flex: auto;
+    white-space-collapse: preserve;
+    text-wrap: wrap;
+    overflow-wrap: break-word;
+  }
+
+  &[type="date"] {
+    width: 9em;
+  }
+}
+
+textarea {
+  font: inherit;
+  color: inherit;
+  background-color: inherit;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  resize: none;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 
   &:focus-visible {
     outline: none;
