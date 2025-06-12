@@ -1,7 +1,7 @@
-import TaskCard from "../TaskCard/TaskCard.tsx";
+import TaskCard from "../TaskCard";
 import type {Task} from "../../types/domain.ts";
 import "./TaskList.scss";
-import Adder from "../Adder/Adder.tsx";
+import Adder from "../Adder";
 
 const TaskList = () => {
 

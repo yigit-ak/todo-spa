@@ -1,7 +1,7 @@
 import {Task} from "../../types/domain.ts";
 
-import RecurrenceDetails from "./RecurrenceDetails.tsx";
-import SubtaskList from "./SubtaskList.tsx";
+import RecurrenceDetails from "./RecurrenceDetails";
+import SubtaskList from "./SubtaskList";
 
 interface Props {
   task: Task;

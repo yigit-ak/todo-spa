@@ -1,7 +1,7 @@
 import {Subtask, Task} from '../../types/domain.ts'
 import "./TaskCard.scss";
-import TaskHeader from "./TaskHeader.tsx";
-import TaskDetails from "./TaskDetails.tsx";
+import TaskHeader from "./TaskHeader";
+import TaskDetails from "./TaskDetails";
 import {useState} from "react";
 
 interface Props {

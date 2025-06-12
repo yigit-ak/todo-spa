@@ -1,4 +1,4 @@
-import Today from "./pages/Today";
+import Today from "./pages/Today/Today.tsx";
 
 const App = () => {
   return(

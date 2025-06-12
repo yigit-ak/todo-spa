@@ -1,5 +1,5 @@
-import Checkbox from "../Checkbox/Checkbox.tsx";
-import TaskTitle from "./TaskTitle.tsx";
+import Checkbox from "../Checkbox";
+import TaskTitle from "./TaskTitle";
 import {BiDetail, BiSolidEdit} from "react-icons/bi";
 
 const TaskHeader = ({task, inDetailView}) => {

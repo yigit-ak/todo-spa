@@ -1,6 +1,6 @@
 import "./Adder.scss"
 import "../TaskCard/TaskCard.scss"
-import AddIcon from "./AddIcon.tsx";
+import AddIcon from "./AddIcon";
 import {ChangeEvent, useEffect, useRef, useState} from "react";
 import {MdLoop} from "react-icons/md";
 

@@ -1,4 +1,4 @@
-import TaskCard from "./TaskCard.tsx";
+import TaskCard from "./TaskCard";
 
 const SubtaskList = ({subtasks}) => {
   return (

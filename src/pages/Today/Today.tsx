@@ -1,5 +1,5 @@
-import Title from "./Title.tsx";
-import TaskList from "../components/TaskList/TaskList.tsx";
+import Title from "./Title";
+import TaskList from "../../components/TaskList";
 import "./Today.scss";
 
 const Today = () => {

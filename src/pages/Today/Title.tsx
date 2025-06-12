@@ -1,5 +1,3 @@
-import {useEffect} from "react";
-
 const Title = () => {
 
   let today = new Date();
