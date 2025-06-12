@@ -1,4 +1,4 @@
-import Checkbox from "./Checkbox.tsx";
+import Checkbox from "../Checkbox/Checkbox.tsx";
 import TaskTitle from "./TaskTitle.tsx";
 import {BiDetail, BiSolidEdit} from "react-icons/bi";
 

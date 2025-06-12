@@ -1,7 +1,5 @@
-import {Task} from "../types/domain.ts";
-import TaskCard from "./TaskCard.tsx";
+import {Task} from "../../types/domain.ts";
 
-import {MdLoop} from "react-icons/md";
 import RecurrenceDetails from "./RecurrenceDetails.tsx";
 import SubtaskList from "./SubtaskList.tsx";
 

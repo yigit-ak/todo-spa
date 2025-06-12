@@ -1,7 +1,5 @@
-import {Subtask, Task} from '../types/domain'
+import {Subtask, Task} from '../../types/domain.ts'
 import "./TaskCard.scss";
-import Checkbox from "../components/Checkbox.tsx";
-import TaskTitle from "./TaskTitle.tsx";
 import TaskHeader from "./TaskHeader.tsx";
 import TaskDetails from "./TaskDetails.tsx";
 import {useState} from "react";

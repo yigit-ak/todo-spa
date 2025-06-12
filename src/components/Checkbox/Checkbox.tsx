@@ -1,6 +1,5 @@
-import tick from "../assets/TickIcon";
-import "../components/Checkbox.scss";
-import TickIcon from "../assets/TickIcon";
+import "./Checkbox.scss";
+import TickIcon from "../../assets/TickIcon.tsx";
 
 const Checkbox = () => {
   return (
