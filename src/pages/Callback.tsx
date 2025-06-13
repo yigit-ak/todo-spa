@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {ReactNode, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {UserManager} from "oidc-client-ts";
 import {oidcConfig} from "../auth/authConfig";
