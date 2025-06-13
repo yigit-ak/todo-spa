@@ -2,15 +2,31 @@ import {createContext, useContext, useEffect, useState} from "react";
 import {UserManager, WebStorageStateStore} from "oidc-client-ts";
 import {oidcConfig} from "./authConfig.ts";
 
-const AuthContext = createContext();
+import type { ReactNode } from "react";
+import type {  User } from "oidc-client-ts";
+
+// the state you store internally
+interface AuthState {
+  user: User | null;
+  loading: boolean;
+}
+
+// the full context value you expose to consumers
+interface AuthContextType extends AuthState {
+  login(): void;
+  logout(): void;
+}
+
+
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const userManager = new UserManager({
   ...oidcConfig,
   userStore: new WebStorageStateStore({store: window.sessionStorage}),
 });
 
-export function AuthProvider({children}) {
-  const [auth, setAuth] = useState({user: null, loading: true});
+export function AuthProvider({children}: { children: ReactNode }) {
+  const [auth, setAuth] = useState<AuthState>({ user: null, loading: true });
 
   useEffect(() => {
     // 1) initial load (fast if user is in sessionStorage)
@@ -40,4 +56,10 @@ export function AuthProvider({children}) {
 );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth(): AuthContextType {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuth must be inside <AuthProvider>");
+  }
+  return ctx;
+}

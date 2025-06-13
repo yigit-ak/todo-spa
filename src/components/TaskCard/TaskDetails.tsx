@@ -1,4 +1,4 @@
-import {Task} from "../../types/domain.ts";
+import {Subtask, Task} from "../../types/domain.ts";
 
 import RecurrenceDetails from "./RecurrenceDetails";
 import SubtaskList from "./SubtaskList";

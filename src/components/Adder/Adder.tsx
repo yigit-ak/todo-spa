@@ -1,7 +1,13 @@
 import "./Adder.scss"
 import "../TaskCard/TaskCard.scss"
 import AddIcon from "./AddIcon";
-import {ChangeEvent, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import type {
+  FocusEvent as ReactFocusEvent,
+  ChangeEvent as ReactChangeEvent,
+  KeyboardEvent as ReactKeyboardEvent,
+} from "react";
+
 import {MdLoop} from "react-icons/md";
 
 interface Props {
@@ -31,7 +37,7 @@ const Adder = ({title}: Props) => {
     setAddingModeOn(true);
   }
 
-  function focusHandle(e: FocusEvent) {
+  function focusHandle(e: ReactFocusEvent<HTMLDivElement>): void {
     // // e.currentTarget is the <div className="new-task">
     // // e.relatedTarget is the new focused element (or null)
     // const isInside = e.currentTarget.contains(e.relatedTarget as Node | null);
@@ -45,11 +51,11 @@ const Adder = ({title}: Props) => {
 
   }
 
-  function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(e: ReactChangeEvent<HTMLInputElement>): void {
     setNewTaskTitle(e.target.value);
   }
 
-  function handleKeyDown(e: KeyboardEvent): void {
+  function handleKeyDown(e: ReactKeyboardEvent<HTMLInputElement>): void {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       console.warn("Ctrl+Enter pressed");
       setAddingModeOn(false);
