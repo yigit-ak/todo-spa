@@ -1,7 +1,5 @@
-@import "../../styles/layout";
+@import "../../styles/mixins";
 
 .task-list {
-  display: flex;
-  flex-direction: column;
-  gap: $main-gap;
+  @include list;
 }

@@ -1,15 +1,11 @@
 @import "../../styles/mixins";
 @import "../../styles/theme";
+
 .task-container {
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: $main-gap;
+ @include container;
 
   .header {
-    display: inline-flex;
-    justify-content: space-between;
-    border-bottom: $text-color-passive solid 2px;
+    @include page-header;
 
     .date {
       font-size: 75%;

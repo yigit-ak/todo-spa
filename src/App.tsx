@@ -2,10 +2,12 @@ import Today from "./pages/Today/Today.tsx";
 import PrivateRoute from "./auth/PrivateRoute.tsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {AuthProvider} from "./auth/AuthProvider.tsx";
-import Callback from "./pages/Callback.tsx";
+import Callback from "./pages/Callback";
+import NewTask from "./pages/NewTask";
+import Login from "./pages/Login";
 
 const App = () => {
-  return(
+  return (
       <AuthProvider>
         <BrowserRouter>
           <Routes>
@@ -18,6 +20,8 @@ const App = () => {
                   </PrivateRoute>
                 }
             />
+            <Route path="/new-task" element={<NewTask/>}/>
+            <Route path="/login" element={<Login/>}/>
           </Routes>
         </BrowserRouter>
       </AuthProvider>
