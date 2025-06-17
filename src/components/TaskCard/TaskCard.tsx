@@ -17,7 +17,7 @@ export default function TaskCard({task}: Props) {
   const [detailedView, setDetailedView] = useState<boolean>(false);
 
   let className = `task-card ${task.completed && 'completed'}`;
-  className += task.dateDue && (getDayDifference(new Date(task.dateDue)) >= 0) ? ' warning' : "";
+  className += !task.completed && task.dateDue && (getDayDifference(new Date(task.dateDue)) >= 0) ? ' warning' : "";
 
   function toggleDetailedView() {
     setDetailedView(prev => !prev);
