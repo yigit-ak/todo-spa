@@ -1,56 +1,18 @@
-@import "../../styles/mixins";
-@import "../../styles/theme";
+@import "../../styles/theme.scss";
 
 .adder {
-  @include card;
   border-color: $color-primary;
-}
-
-.adder-header {
-  @include card-header;
   color: $color-primary;
 }
 
-.adder-body {
-  @include card-body;
-  gap: 20px;
-}
-
-.add-icon {
+.icon {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  width: 18px;
-  height: 18px;
   border-radius: 8px;
   border: 2px solid $color-primary;
-
   svg {
     width: 75%;
     height: 75%;
   }
-}
-
-.recurrence-details-box {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.recurrence-details-edit {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-}
-
-.dates {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
-}
-
-.recurrence-icon {
-  width: 3em;
-  height: 3em;
 }

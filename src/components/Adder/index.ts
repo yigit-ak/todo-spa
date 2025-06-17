@@ -1,1 +1,1 @@
-export {default} from './Adder';
+export { default } from './Adder.tsx';

@@ -1,33 +1,6 @@
 @import "layout";
 @import "theme";
 
-@mixin card {
-  display: flex;
-  //align-items: center;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  border-radius: 18px;
-  cursor: pointer;
-  //gap: $main-gap;
-  padding: 10px;
-  user-select: none;
-  background-color: transparent;
-  border-width: 2px;
-  border-style: solid;
-}
-
-@mixin card-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-
-  //&:focus-visible {
-  //  align-items: flex-start;
-  //} todo do later
-}
-
 @mixin card-body {
   display: flex;
   flex-direction: column;
@@ -36,21 +9,6 @@
   width: 100%;
 }
 
-@mixin page-header {
-  display: inline-flex;
-  justify-content: space-between;
-  border-bottom: $text-color-passive solid 2px;
-}
-
-@mixin container {
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: $main-gap;
-}
-
-@mixin list {
-  display: flex;
-  flex-direction: column;
-  gap: $main-gap;
-}
+//@mixin page-header {
+//  border-bottom: $color-passive solid 2px; // handle this, for now i only did layout
+//}

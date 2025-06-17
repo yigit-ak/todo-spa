@@ -1,25 +1,45 @@
-import Today from "./pages/Today/Today.tsx";
 import PrivateRoute from "./auth/PrivateRoute.tsx";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
 import {AuthProvider} from "./auth/AuthProvider.tsx";
 import Callback from "./pages/Callback";
-import NewTask from "./pages/NewTask";
+import TasksByDate from "./pages/TasksByDate";
 
 const App = () => {
   return (
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/callback" element={<Callback/>}/>
-            <Route
-                path="/"
-                element={
-                  // <PrivateRoute>
-                    <Today/>
-                  // </PrivateRoute>
-                }
-            />
-            <Route path="/new-task" element={<NewTask/>}/>
+
+            {/* redirect root → today’s date view */}
+            <Route path="/" element={<Navigate to={`/date/${new Date().toISOString().slice(0, 10)}`} replace/>}/>
+
+            {/* top-level date route: /date/2025-06-17 */}
+            <Route path="date/:date" element={<TasksByDate/>}/>
+
+            {/*/!* other task views under /tasks *!/*/}
+            {/*<Route path="tasks">*/}
+            {/*  <Route path="due" element={<TasksByDue/>}/>*/}
+            {/*  <Route path="unassigned" element={<UnassignedTasks/>}/>*/}
+            {/*  <Route path="new" element={<NewTask/>}/>*/}
+
+            {/*  /!* per-task details & edit *!/*/}
+            {/*  <Route path=":taskId">*/}
+            {/*    <Route index element={<TaskDetails/>}/>*/}
+            {/*    <Route path="edit" element={<EditTask/>}/>*/}
+            {/*  </Route>*/}
+            {/*</Route>*/}
+
+            {/*/!* list pages *!/*/}
+            {/*<Route path="lists">*/}
+            {/*  <Route index element={<ListsOverview/>}/>*/}
+            {/*  <Route path=":listId" element={<ListDetail/>}/>*/}
+            {/*</Route>*/}
+
+            {/*<Route path="/callback" element={<Callback/>}/>*/}
+
+            {/*/!* catch-all *!/*/}
+            {/*<Route path="*" element={<NotFound/>}/>*/}
+
           </Routes>
         </BrowserRouter>
       </AuthProvider>

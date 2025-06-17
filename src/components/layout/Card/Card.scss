@@ -1,0 +1,40 @@
+@import "../../../styles/layout.scss";
+@import "../../../styles/theme.scss";
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $horizontal-gap;
+
+  border-radius: 18px;
+  background-color: $card-background-color;
+  border: 2px solid $color-passive;
+  padding: 10px;
+}
+
+.main-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: auto;
+  gap: $horizontal-gap;
+
+  .icon {
+    width: 1em;
+    height: 1em;
+  }
+
+  .title {
+    flex: auto;
+  }
+}
+
+.side-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: $horizontal-gap;
+
+}
