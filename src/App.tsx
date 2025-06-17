@@ -21,7 +21,6 @@ const App = () => {
                 }
             />
             <Route path="/new-task" element={<NewTask/>}/>
-            <Route path="/login" element={<Login/>}/>
           </Routes>
         </BrowserRouter>
       </AuthProvider>
