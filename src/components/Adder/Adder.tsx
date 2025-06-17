@@ -1,18 +1,17 @@
 import Card, {MainContent} from "../layout/Card";
-import {FaPlus} from "react-icons/fa";
 import "./Adder.scss";
+import AddIcon from "../../assets/AddIcon.tsx";
 
 interface Props {
   title: string;
-
-  action(): void;
+  add(): void;
 }
 
-export default function Adder({ title, action }: Props) {
+export default function Adder({title, add}: Props) {
   return (
-      <Card className="adder" onClick={action}>
+      <Card className="adder">
         <MainContent>
-          <span className="icon"><FaPlus/></span>
+          <AddIcon/>
           <span className="title">{title}</span>
         </MainContent>
       </Card>

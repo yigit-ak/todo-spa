@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
 import {AuthProvider} from "./auth/AuthProvider.tsx";
 import Callback from "./pages/Callback";
 import TasksByDate from "./pages/TasksByDate";
+import NewTask from "./pages/NewTask"
 
 const App = () => {
   return (
@@ -17,17 +18,17 @@ const App = () => {
             <Route path="date/:date" element={<TasksByDate/>}/>
 
             {/*/!* other task views under /tasks *!/*/}
-            {/*<Route path="tasks">*/}
+            <Route path="tasks">
             {/*  <Route path="due" element={<TasksByDue/>}/>*/}
             {/*  <Route path="unassigned" element={<UnassignedTasks/>}/>*/}
-            {/*  <Route path="new" element={<NewTask/>}/>*/}
+              <Route path="new" element={<NewTask/>}/>
 
-            {/*  /!* per-task details & edit *!/*/}
-            {/*  <Route path=":taskId">*/}
+              {/* per-task details & edit */}
+              {/*<Route path=":taskId">*/}
             {/*    <Route index element={<TaskDetails/>}/>*/}
             {/*    <Route path="edit" element={<EditTask/>}/>*/}
             {/*  </Route>*/}
-            {/*</Route>*/}
+            </Route>
 
             {/*/!* list pages *!/*/}
             {/*<Route path="lists">*/}
@@ -35,7 +36,7 @@ const App = () => {
             {/*  <Route path=":listId" element={<ListDetail/>}/>*/}
             {/*</Route>*/}
 
-            {/*<Route path="/callback" element={<Callback/>}/>*/}
+            <Route path="/callback" element={<Callback/>}/>
 
             {/*/!* catch-all *!/*/}
             {/*<Route path="*" element={<NotFound/>}/>*/}

@@ -4,15 +4,3 @@
   border-color: $color-primary;
   color: $color-primary;
 }
-
-.icon {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  border-radius: 8px;
-  border: 2px solid $color-primary;
-  svg {
-    width: 75%;
-    height: 75%;
-  }
-}
