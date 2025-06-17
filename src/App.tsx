@@ -14,9 +14,9 @@ const App = () => {
             <Route
                 path="/"
                 element={
-                  <PrivateRoute>
+                  // <PrivateRoute>
                     <Today/>
-                  </PrivateRoute>
+                  // </PrivateRoute>
                 }
             />
             <Route path="/new-task" element={<NewTask/>}/>
