@@ -1,5 +1,12 @@
 @import "../../styles/theme.scss";
 
-.card.completed {
-  color: $text-color-passive;
+.card {
+  &.completed {
+    color: $text-color-passive;
+  }
+
+  &.warning {
+    color: $color-warning;
+    border-color: $color-warning;
+  }
 }

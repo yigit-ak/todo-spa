@@ -3,28 +3,31 @@ export interface DateContainerHead {
   sideContent: string;
 }
 
-export function getDateContainerHead(date: Date): DateContainerHead {
-  // Normalize both dates to midnight so we get whole-day differences
+export function getDayDifference(target: Date, base: Date = new Date()): number {
   const msPerDay = 1000 * 60 * 60 * 24;
-  const today = new Date();
-  const todayMid = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const targetMid = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const dayDifference = Math.round((targetMid.getTime() - todayMid.getTime()) / msPerDay);
+  const baseMid = new Date(base.getFullYear(), base.getMonth(), base.getDate());
+  const targetMid = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+  return Math.round((targetMid.getTime() - baseMid.getTime()) / msPerDay);
+}
 
-  // Check if within one year (365 days) of today
+function getWeekdayName(date: Date): string {
+  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  return weekdays[date.getDay()];
+}
+
+function formatDate(date: Date, withYear: boolean = true): string {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return withYear ? `${month}/${day}/${year}` : `${month}/${day}`;
+}
+
+export function getDateContainerHead(date: Date): DateContainerHead {
+  const dayDifference = getDayDifference(date);
   const isWithinOneYear = Math.abs(dayDifference) < 365;
 
-  // Helpers for weekday names
-  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const weekdayName = weekdays[date.getDay()];
-
-  // Build date strings, omitting year if within one year
-  const month = date.getMonth() + 1;
-  const dayNum = date.getDate();
-  const yearNum = date.getFullYear();
-  const formattedDate = isWithinOneYear
-      ? `${month}/${dayNum}`
-      : `${month}/${dayNum}/${yearNum}`;
+  const weekdayName = getWeekdayName(date);
+  const formattedDate = formatDate(date, !isWithinOneYear);
   const fullDateWithWeekday = `${weekdayName}, ${formattedDate}`;
 
   let mainContent: string;
@@ -40,18 +43,25 @@ export function getDateContainerHead(date: Date): DateContainerHead {
     mainContent = "Yesterday";
     sideContent = fullDateWithWeekday;
   } else if (dayDifference > 1 && dayDifference < 7) {
-    // In the next week
     mainContent = weekdayName;
     sideContent = formattedDate;
   } else if (dayDifference < -1 && dayDifference > -7) {
-    // In the past week
     mainContent = `Last ${weekdayName}`;
     sideContent = formattedDate;
   } else {
-    // Anything else: show the raw date, with weekday as secondary
     mainContent = formattedDate;
     sideContent = weekdayName;
   }
 
   return { mainContent, sideContent };
 }
+
+export function getRelativeDueDate(date: string): string {
+  const dayDifference = getDayDifference(new Date(date));
+
+  if (dayDifference === 0) return "Today";
+  if (dayDifference === 1) return "Tomorrow";
+  if (dayDifference > 1) return `${dayDifference} days left`;
+  return `${Math.abs(dayDifference)} days overdue`;
+}
+

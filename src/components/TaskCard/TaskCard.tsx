@@ -1,11 +1,12 @@
 import Card, {MainContent, SideContent} from "../layout/Card";
-import {Subtask, Task} from "../../types/domain.ts";
+import {Task} from "../../types/domain.ts";
 import {showHelperIcon} from "../../util/helperIconUtil.ts";
 import Checkbox from "../Checkbox";
 import {BiDetail} from "react-icons/bi";
 import "./TaskCard.scss";
 import {useState} from "react";
-import DetailedTaskCard from "../DetailedTaskCard";
+import DetailedTaskCard from "./DetailedTaskCard";
+import {getDayDifference} from "../../util/dateUtil.ts";
 
 interface Props {
   task: Task;
@@ -15,16 +16,17 @@ interface Props {
 export default function TaskCard({task}: Props) {
   const [detailedView, setDetailedView] = useState<boolean>(false);
 
-  const className = `task-card ${task.completed && 'completed'} ${!!task.dateDue && 'due'}`
+  let className = `task-card ${task.completed && 'completed'}`;
+  className += task.dateDue && (getDayDifference(new Date(task.dateDue)) >= 0) ? ' warning' : "";
 
   function toggleDetailedView() {
     setDetailedView(prev => !prev);
   }
 
   return detailedView ? (
-      <DetailedTaskCard task={task}/>
+      <DetailedTaskCard task={task} toggleDetailedView={toggleDetailedView}/>
   ) : (
-      <Card className={className}>
+      <Card className={className} toggleDetailView={toggleDetailedView}>
 
         <MainContent>
           <Checkbox/>

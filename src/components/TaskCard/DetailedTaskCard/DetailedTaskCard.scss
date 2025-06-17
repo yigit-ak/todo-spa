@@ -1,0 +1,46 @@
+@import "../../../styles/layout";
+@import "../../../styles/theme";
+
+.detailed-task-card{
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  background-color: $card-background-color;
+  border: 2px solid $color-passive;
+  padding: 10px;
+  gap: $vertical-gap;
+}
+
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $horizontal-gap;
+}
+
+.recurrence-info{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: $horizontal-gap;
+  color: $text-color-passive;
+}
+
+.due-date-info{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: $horizontal-gap;
+  color: $color-warning;
+}
+
+.description{
+  font-weight: normal;
+}
+
+.subtask-list{
+  display: flex;
+  flex-direction: column;
+
+  gap: $horizontal-gap;
+}

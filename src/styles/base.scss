@@ -27,7 +27,7 @@ input {
   color: inherit;
   background-color: inherit;
   border: none;
-  border-bottom: solid 2px $color-primary;
+  padding: 0;
   color-scheme: dark;
 
   &:focus-visible {
@@ -55,7 +55,6 @@ textarea {
   color: inherit;
   background-color: inherit;
   border: none;
-  border-radius: 10px;
   width: 100%;
   resize: none;
   box-sizing: border-box;
