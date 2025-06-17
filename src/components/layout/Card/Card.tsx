@@ -3,12 +3,14 @@ import './Card.scss';
 interface Props {
   children: any;
   className: string;
-  toggleDetailView():void;
 }
 
-export default function Card({ children, className = '', toggleDetailView }) {
+export default function Card({ children, className = '', ...rest }: Props) {
   return (
-      <div className={`card ${className}`} onDoubleClick={toggleDetailView}>
+      <div
+          className={`card ${className}`}
+          {...rest}
+      >
         {children}
       </div>
   );

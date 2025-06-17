@@ -24,9 +24,9 @@ export default function TaskCard({task}: Props) {
   }
 
   return detailedView ? (
-      <DetailedTaskCard task={task} toggleDetailedView={toggleDetailedView}/>
+      <DetailedTaskCard task={task} onDoubleClick={toggleDetailedView}/>
   ) : (
-      <Card className={className} toggleDetailView={toggleDetailedView}>
+      <Card className={className} onDoubleClick={toggleDetailedView}>
 
         <MainContent>
           <Checkbox/>

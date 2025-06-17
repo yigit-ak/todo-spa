@@ -11,13 +11,12 @@ import {getRelativeDueDate} from "../../../util/dateUtil.ts";
 
 interface Props {
   task: Task
-  toggleDetailedView(): void;
 }
 
-export default function DetailedTaskCard({task, toggleDetailedView}: Props) {
+export default function DetailedTaskCard({task, ...res}: Props) {
   const recurrence = task.recurrence;
   return (
-      <div className="detailed-task-card" onDoubleClick={toggleDetailedView} >
+      <div className="detailed-task-card" {...res} >
 
         <div className="header">
           <MainContent>
