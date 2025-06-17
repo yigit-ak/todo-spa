@@ -4,7 +4,6 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import {AuthProvider} from "./auth/AuthProvider.tsx";
 import Callback from "./pages/Callback";
 import NewTask from "./pages/NewTask";
-import Login from "./pages/Login";
 
 const App = () => {
   return (
