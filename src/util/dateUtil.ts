@@ -11,10 +11,20 @@ export function getDateContainerHead(date: Date): DateContainerHead {
   const targetMid = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const dayDifference = Math.round((targetMid.getTime() - todayMid.getTime()) / msPerDay);
 
-  // Helpers for weekday names and simple date formatting
+  // Check if within one year (365 days) of today
+  const isWithinOneYear = Math.abs(dayDifference) < 365;
+
+  // Helpers for weekday names
   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const weekdayName = weekdays[date.getDay()];
-  const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+
+  // Build date strings, omitting year if within one year
+  const month = date.getMonth() + 1;
+  const dayNum = date.getDate();
+  const yearNum = date.getFullYear();
+  const formattedDate = isWithinOneYear
+      ? `${month}/${dayNum}`
+      : `${month}/${dayNum}/${yearNum}`;
   const fullDateWithWeekday = `${weekdayName}, ${formattedDate}`;
 
   let mainContent: string;
