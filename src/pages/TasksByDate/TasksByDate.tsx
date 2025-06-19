@@ -5,6 +5,7 @@ import Container, {Body, Head, HeadMainContent, HeadSideContent} from "../../com
 import {getDateContainerHead} from "../../util/dateUtil.ts";
 import TaskCard from "../../components/TaskCard";
 import {TaskAdder} from "../../components/Adder";
+import type {CreateTaskDto} from "../../types/task.ts";
 
 export default function TasksByDate() {
   const {date} = useParams<{ date: string }>();
@@ -81,6 +82,10 @@ export default function TasksByDate() {
     // getTasksForToday().then(tasks => setTasks(tasks))
   }, []);
 
+  function addTask(task: CreateTaskDto) {
+    // todo add body
+  }
+
   const {mainContent, sideContent} = getDateContainerHead(new Date(date));
 
   return (
@@ -97,7 +102,7 @@ export default function TasksByDate() {
 
         <Body>
           {tasks.map(task => <TaskCard task={task} key={task.id}/>)}
-          <TaskAdder dateAssigned={date} />
+          <TaskAdder dateAssigned={date} add={addTask}/>
           {/*add={} todo implement the add fnctn*/}
         </Body>
 
