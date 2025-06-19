@@ -14,5 +14,4 @@ export interface UpdateTaskDto {
   dateAssigned?: string;
   dateDue?: string;
   completed?: boolean;
-  // recurrenceId?: string; todo not sure
 }

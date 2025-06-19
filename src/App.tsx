@@ -5,6 +5,7 @@ import Callback from "./pages/Callback";
 import TasksByDate from "./pages/TasksByDate";
 import NewTask from "./pages/NewTask"
 import TaskDetails from "./pages/TaskDetails";
+import EditTask from "./pages/EditTask";
 
 const App = () => {
   return (
@@ -27,7 +28,7 @@ const App = () => {
               {/* per-task details & edit */}
               <Route path=":taskId">
                 <Route index element={<TaskDetails/>}/>
-                {/*<Route path="edit" element={<EditTask/>}/>*/}
+                <Route path="edit" element={<EditTask/>}/>
               </Route>
             </Route>
 
