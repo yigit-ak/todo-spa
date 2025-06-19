@@ -1,6 +1,7 @@
 // Color Palette
 $color-primary: #89D7FF;
 $color-warning: #FF8989;
+$color-info: #89FF8D;
 $color-light: #d9d9d9;
 $color-passive: #4e4f4f;
 $color-dark: #111111;
@@ -32,4 +33,9 @@ button.clear {
 .warning-hover:hover {
   border-color: $color-warning;
   color: $color-warning;
+}
+
+.info-hover:hover {
+  border-color: $color-info;
+  color: $color-info;
 }
