@@ -1,9 +1,9 @@
-import {useCallback, useState} from "react";
+import {FormEvent, useCallback, useState} from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import Container, {Body, Head, HeadMainContent, HeadSideContent,} from "../../components/layout/Container";
 import Card, {MainContent, SideContent} from "../../components/layout/Card";
 import {RiDeleteBin5Line} from "react-icons/ri";
-import {MdOutlineDateRange, MdWarningAmber} from "react-icons/md";
+import {MdLoop, MdOutlineDateRange, MdWarningAmber} from "react-icons/md";
 import Checkbox from "../../components/Checkbox";
 import {SubtaskAdder} from "../../components/Adder";
 import {createSubtask, deleteSubtask, updateSubtask, updateTask,} from "../../api";
@@ -54,23 +54,40 @@ export default function EditTask() {
   const [dateAssigned, setDateAssigned] = useState(task.dateAssigned);
   const [dateDue, setDateDue] = useState(task.dateDue);
 
+  // recurrence state
+  const [isRecurrent, setIsRecurrent] = useState(!!task.recurrence);
+  const [recStart, setRecStart] = useState(task.recurrence?.startDate ?? "");
+  const [recPeriod, setRecPeriod] = useState(task.recurrence?.period ?? 1);
+  const [recEnd, setRecEnd] = useState(task.recurrence?.endDate ?? "");
+
   // ----- sub-tasks state -----
   const [subtasks, setSubtasks] = useState([...task.subtasks]);
 
   /*──────────────── helpers ────────────────*/
+  const buildTaskDiff = (): UpdateTaskDto => {
+    const diff: UpdateTaskDto = {};
+
+    if (title !== task.title) diff.title = title;
+    if (description !== task.description) diff.description = description;
+    if (dateAssigned !== task.dateAssigned) diff.dateAssigned = dateAssigned || undefined;
+    if (dateDue !== task.dateDue) diff.dateDue = dateDue || undefined;
+    /* completed intentionally skipped */
+
+    return diff;
+  };
+
   const formIsValid = () => title.trim().length > 0;
 
-  const handleSave = async (e: React.FormEvent) => {
+  const handleSave = async (e: FormEvent) => {
     e.preventDefault();
     if (!taskId) return;
 
-    const dto: UpdateTaskDto = {
-      title,
-      description: description || undefined,
-      dateAssigned: dateAssigned || undefined,
-      dateDue: dateDue || undefined,
-      // completed intentionally omitted (handled elsewhere)
-    };
+    const dto = buildTaskDiff();
+    // If nothing changed, just go back.
+    if (Object.keys(dto).length === 0) {
+      navigate(location.state?.from ?? "/");
+      return;
+    }
 
     await updateTask(taskId, dto);
     navigate(location.state?.from ?? "/");
@@ -84,22 +101,27 @@ export default function EditTask() {
   };
 
   const handleSubtaskChange = useCallback(
-      async (
+      (
           idx: number,
           field: keyof UpdateSubtaskDto,
           value: string | boolean
       ) => {
-        const old = subtasks[idx];
-        if (!taskId || !old) return;
-
-        const dto: UpdateSubtaskDto = {[field]: value} as UpdateSubtaskDto;
-        await updateSubtask(taskId, old.id, dto);
-
         setSubtasks((prev) => {
           const clone = [...prev];
-          clone[idx] = {...old, ...dto};
+          const old = clone[idx];
+
+          // nothing to do
+          if (!old || old[field as keyof typeof old] === value) return prev;
+
+          clone[idx] = {...old, [field]: value};
           return clone;
         });
+
+        // Fire-and-forget API call (no await → UI stays responsive)
+        if (taskId) {
+          const dto: UpdateSubtaskDto = {[field]: value} as UpdateSubtaskDto;
+          updateSubtask(taskId, subtasks[idx].id, dto).catch(console.error);
+        }
       },
       [subtasks, taskId]
   );
@@ -168,6 +190,47 @@ export default function EditTask() {
                 </MainContent>
               </Card>
             </label>
+
+            {/* Recurrence */}
+            <Card>
+              <MainContent>
+                <MdLoop/>
+                <div style={{display: "flex", flexDirection: "column"}}>
+                  <label style={{display: "flex", gap: "10px", alignItems: "center"}}>
+                    <span>Start on</span>
+                    <input
+                        type="date"
+                        id="recStart"
+                        value={recStart}
+                        onChange={(e) => setRecStart(e.target.value)}
+                    />
+                  </label>
+
+                  <label style={{display: "flex", gap: "10px", alignItems: "center"}}>
+                    <span>Repeat every</span>
+                    <input
+                        type="number"
+                        id="recPeriod"
+                        min={1}
+                        value={recPeriod}
+                        onChange={(e) => setRecPeriod(Number(e.target.value))}
+                        style={{width: 60}}
+                    />
+                    <span>day(s)</span>
+                  </label>
+
+                  <label style={{display: "flex", gap: "10px", alignItems: "center"}}>
+                    <span>End on</span>
+                    <input
+                        type="date"
+                        id="recEnd"
+                        value={recEnd}
+                        onChange={(e) => setRecEnd(e.target.value)}
+                    />
+                  </label>
+                </div>
+              </MainContent>
+            </Card>
 
             {/* Description */}
             <Card>
