@@ -2,7 +2,7 @@ import './Card.scss';
 
 interface Props {
   children: any;
-  className: string;
+  className?: string;
 }
 
 export default function Card({ children, className = '', ...rest }: Props) {

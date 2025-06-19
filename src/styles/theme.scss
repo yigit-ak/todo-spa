@@ -13,3 +13,23 @@ $card-background-color: transparent;
 $text-color-default: $color-light;
 $text-color-passive: $color-passive;
 $text-color-accent: $color-primary;
+
+.passive {
+  color: $text-color-passive;
+}
+
+button.clear {
+  font: inherit;
+  display: contents;
+  background-color: transparent;
+  border: none;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.warning-hover:hover {
+  border-color: $color-warning;
+  color: $color-warning;
+}

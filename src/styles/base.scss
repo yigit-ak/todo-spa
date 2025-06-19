@@ -50,6 +50,13 @@ input {
   }
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
 textarea {
   font: inherit;
   color: inherit;
