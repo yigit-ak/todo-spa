@@ -1,17 +1,19 @@
 import {useNavigate, useParams} from "react-router-dom";
 import Container, {Body, Head, HeadMainContent, HeadSideContent} from "../../components/layout/Container";
-import type {Task} from "../../types/domain.ts";
+import type {Task} from "../../types/domain";
 import Checkbox from "../../components/Checkbox";
 import {BiSolidEdit} from "react-icons/bi";
 import {MdLoop, MdOutlineDateRange, MdWarningAmber} from "react-icons/md";
 import Card, {MainContent} from "../../components/layout/Card";
+import {SubtaskCard} from "../../components/TaskCard";
 
 export default function TaskDetails() {
-  const {taskId} = useParams<{ id: string }>();
+  const {taskId} = useParams<{ taskId: string }>();
   const navigate = useNavigate();
 
+  // TODO: Replace with API fetch by ID
   const task: Task = {
-    id: "task-123",
+    id: taskId || "",
     title: "Implement new feature X",
     description: "Refactor module Y, add endpoints and update docs.",
     dateAssigned: "2025-06-20",
@@ -24,70 +26,74 @@ export default function TaskDetails() {
         completed: false,
         description: "Cover all new service methods with Jest"
       },
-      {
-        id: "sub-002",
-        title: "Review PR #42",
-        completed: true,
-        description: "Ensure integration tests pass"
-      }
+      {id: "sub-002", title: "Review PR #42", completed: true, description: "Ensure integration tests pass"},
     ],
     recurrence: {
       id: "rec-100",
       startDate: "2025-06-19",
       endDate: "2025-12-31",
-      period: 7
-    }
+      period: 7,
+    },
   };
 
   return (
       <Container>
-
         <Head>
           <HeadMainContent>
             <Checkbox/>
             <span>{task.title}</span>
           </HeadMainContent>
           <HeadSideContent>
-            <button className="passive info-hover clear" onClick={() => navigate(`/tasks/${taskId}/edit`)}>
+            <button
+                className="passive info-hover clear"
+                onClick={() => navigate(`/tasks/${taskId}/edit`)}
+                title="Edit task"
+            >
               <BiSolidEdit/>
             </button>
           </HeadSideContent>
         </Head>
 
-
         <Body>
-          <MainContent>
-            <MdOutlineDateRange/> <span>Assigned date: {task.dateAssigned}</span>
-          </MainContent>
-
-
-        <label htmlFor="dateDue" className={dateDue ? "" : "passive"}>
           <Card>
             <MainContent>
-              <MdWarningAmber/> <span>Due date: {task.dateDue}</span>
+              <MdOutlineDateRange/>
+              <span>Assigned date: {task.dateAssigned || "-"}</span>
             </MainContent>
           </Card>
-        </label>
 
-        <MainContent className={!!task.recurrence ? "" : "passive"}>
-          <MdLoop/>
-          <div style={{display: "flex", flexDirection: "column"}}>
-            <div style={{display: "flex", gap: "10px"}} >
-              <span>Start on {task.recurrence?.startDate}</span>
-            </div>
+          <Card className="warning">
+            <MainContent>
+              <MdWarningAmber/>
+              <span>Due date: {task.dateDue || "-"}</span>
+            </MainContent>
+          </Card>
 
-            <div style={{display: "flex", gap: "10px"}} >
-              <span>Repeat every {task.recurrence?.period} days</span>
-            </div>
+          {task.recurrence && (
+              <Card>
+                <MainContent>
+                  <MdLoop/>
+                  <div style={{display: "flex", flexDirection: "column", gap: "4px"}}>
+                    <span>Start on {task.recurrence.startDate}</span>
+                    <span>Repeat every {task.recurrence.period} day(s)</span>
+                    {task.recurrence.endDate && <span>End on {task.recurrence.endDate}</span>}
+                  </div>
+                </MainContent>
+              </Card>
+          )}
 
-            <div style={{display: "flex", gap: "10px"}} >
-              <span>End on {task.recurrence?.endDate}</span>
-            </div>
-          </div>
-        </MainContent>
+          <Card>
+            <MainContent>
+              {task.description}
+            </MainContent>
+          </Card>
+
+          {!!task.subtasks.length && task.subtasks.map(subtask => (
+              <SubtaskCard task={subtask} key={subtask.id}/>
+              )
+          )}
 
         </Body>
-
       </Container>
   );
 }
