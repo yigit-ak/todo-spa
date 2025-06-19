@@ -48,13 +48,15 @@ export default function NewTask() {
 
   // dynamic subtasks
   const [subtasks, setSubtasks] = useState<CreateSubtaskDto[]>([]);
-  const addSubtask = () => setSubtasks([...subtasks, {title: "", description: ""}]);
+  const addSubtask = (newSubtask: CreateSubtaskDto) => setSubtasks((prev) => [...prev, newSubtask]);
+
   const updateSubtask = (
       idx: number,
       key: "title" | "description",
       value: string,
   ) => setSubtasks((st) => st.map((s, i) => (i === idx ? {...s, [key]: value} : s)));
-  const removeSubtask = (idx: number) => setSubtasks((st) => st.filter((_, i) => i !== idx));
+  const removeSubtask = (idx: number) =>
+      setSubtasks((st) => st.filter((_, i) => i !== idx));
 
   // ---------- validation ---------------
   const formIsValid = () => {
@@ -118,7 +120,7 @@ export default function NewTask() {
             </HeadMainContent>
             <HeadSideContent>
               {/* reset navigates back without saving */}
-              <button className="passive warning-hover clear " onClick={() => navigate(-1)}>
+              <button className="passive warning-hover clear " onClick={() => navigate(location.state?.from ?? "/")}>
                 <RiDeleteBin5Line/>
               </button>
             </HeadSideContent>
@@ -218,7 +220,8 @@ export default function NewTask() {
                 </Card>
 
             ))}
-            <SubtaskAdder/>
+
+            <SubtaskAdder add={addSubtask}/>
 
             {/* Save button */}
             <div>

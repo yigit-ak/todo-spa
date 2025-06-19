@@ -1,9 +1,9 @@
-import Adder from "./Adder.tsx";
+import {useState, KeyboardEvent} from "react";
+
+import Adder from "./Adder";
 import Card, {MainContent} from "../layout/Card";
 import Checkbox from "../Checkbox";
-import type {CreateSubtaskDto} from "../../types/subtask.ts";
-import {FormEvent, useState} from "react";
-import type {CreateTaskDto} from "../../types/task.ts";
+import type {CreateSubtaskDto} from "../../types/subtask";
 
 interface Props {
   add(subtask: CreateSubtaskDto): void;
@@ -12,34 +12,40 @@ interface Props {
 export default function SubtaskAdder({add}: Props) {
   const [title, setTitle] = useState<string>("");
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+  function commit() {
     const trimmed = title.trim();
-    if (!trimmed) return; // ignore empty submissions
+    if (!trimmed) return;
 
-    const task: CreateSubtaskDto = {
+    const payload: CreateSubtaskDto = {
       title: trimmed,
     };
 
-    add(task);
+    add(payload);
+    setTitle(""); // clear for the next entry
+  }
+
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      e.preventDefault(); // keep it from bubbling to parent <form>
+      commit();
+    }
   }
 
   return (
       <Adder title="Add subtask">
-        <form onSubmit={handleSubmit}>
-          <Card className="adder">
-            <MainContent>
-              <Checkbox/>
-              <input type="text"
-                     autoFocus
-                     name="title"
-                     placeholder="Subtask title"
-                     value={title}
-                     onChange={(e) => setTitle(e.target.value)}
-              />
-            </MainContent>
-          </Card>
-        </form>
+        <Card className="adder">
+          <MainContent>
+            <Checkbox/>
+            <input
+                type="text"
+                autoFocus
+                placeholder="Subtask title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                onKeyDown={handleKeyDown}
+            />
+          </MainContent>
+        </Card>
       </Adder>
   );
 }

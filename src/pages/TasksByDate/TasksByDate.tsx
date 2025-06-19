@@ -3,7 +3,6 @@ import {useParams} from 'react-router-dom';
 import type {Task} from "../../types/domain.ts";
 import Container, {Body, Head, HeadMainContent, HeadSideContent} from "../../components/layout/Container";
 import {getDateContainerHead} from "../../util/dateUtil.ts";
-import {getTasksForToday} from "../../api";
 import TaskCard from "../../components/TaskCard";
 import {TaskAdder} from "../../components/Adder";
 
