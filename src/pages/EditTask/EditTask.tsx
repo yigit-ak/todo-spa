@@ -54,12 +54,6 @@ export default function EditTask() {
   const [dateAssigned, setDateAssigned] = useState(task.dateAssigned);
   const [dateDue, setDateDue] = useState(task.dateDue);
 
-  // recurrence state
-  const [isRecurrent, setIsRecurrent] = useState(!!task.recurrence);
-  const [recStart, setRecStart] = useState(task.recurrence?.startDate ?? "");
-  const [recPeriod, setRecPeriod] = useState(task.recurrence?.period ?? 1);
-  const [recEnd, setRecEnd] = useState(task.recurrence?.endDate ?? "");
-
   // ----- sub-tasks state -----
   const [subtasks, setSubtasks] = useState([...task.subtasks]);
 
@@ -190,47 +184,6 @@ export default function EditTask() {
                 </MainContent>
               </Card>
             </label>
-
-            {/* Recurrence */}
-            <Card>
-              <MainContent>
-                <MdLoop/>
-                <div style={{display: "flex", flexDirection: "column"}}>
-                  <label style={{display: "flex", gap: "10px", alignItems: "center"}}>
-                    <span>Start on</span>
-                    <input
-                        type="date"
-                        id="recStart"
-                        value={recStart}
-                        onChange={(e) => setRecStart(e.target.value)}
-                    />
-                  </label>
-
-                  <label style={{display: "flex", gap: "10px", alignItems: "center"}}>
-                    <span>Repeat every</span>
-                    <input
-                        type="number"
-                        id="recPeriod"
-                        min={1}
-                        value={recPeriod}
-                        onChange={(e) => setRecPeriod(Number(e.target.value))}
-                        style={{width: 60}}
-                    />
-                    <span>day(s)</span>
-                  </label>
-
-                  <label style={{display: "flex", gap: "10px", alignItems: "center"}}>
-                    <span>End on</span>
-                    <input
-                        type="date"
-                        id="recEnd"
-                        value={recEnd}
-                        onChange={(e) => setRecEnd(e.target.value)}
-                    />
-                  </label>
-                </div>
-              </MainContent>
-            </Card>
 
             {/* Description */}
             <Card>
