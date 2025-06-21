@@ -6,6 +6,7 @@ import {getDateContainerHead} from "../../util/dateUtil.ts";
 import TaskCard from "../../components/TaskCard";
 import {TaskAdder} from "../../components/Adder";
 import type {CreateTaskDto} from "../../types/task.ts";
+import {createTask} from "../../api";
 
 export default function TasksByDate() {
   const {date} = useParams<{ date: string }>();
@@ -78,13 +79,40 @@ export default function TasksByDate() {
     },
   ]);
 
-  useEffect(() => { // todo: not for today, pass the date as param
-    // getTasksForToday().then(tasks => setTasks(tasks))
-  }, []);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  function addTask(task: CreateTaskDto) {
-    // todo add body
+  // Fetch tasks for a given date
+  useEffect(() => {
+    if (!date) return;
+
+    setLoading(true);
+    getTasksByDate(date)
+        .then(res => {
+          setTasks(res.data);
+          setError(null);
+        })
+        .catch(err => {
+          console.error(err);
+          setError("Failed to fetch tasks for this date.");
+        })
+        .finally(() => setLoading(false));
+  }, [date]);
+
+  // Add a new task to this date
+  async function addTask(task: CreateTaskDto) {
+    try {
+      const response = await createTask({...task, dateAssigned: date});
+      setTasks(prev => [...prev, response]);
+    } catch (err) {
+      console.error("Failed to create task", err);
+      alert("Failed to create task. Try again later.");
+    }
   }
+
+  if (!date) return <p style={{padding: "1rem"}}>No date provided.</p>;
+  if (loading) return <p style={{padding: "1rem"}}>Loading tasks...</p>;
+  if (error) return <p style={{padding: "1rem", color: "red"}}>{error}</p>;
 
   const {mainContent, sideContent} = getDateContainerHead(new Date(date));
 

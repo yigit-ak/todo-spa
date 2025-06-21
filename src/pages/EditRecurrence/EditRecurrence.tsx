@@ -1,4 +1,4 @@
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import type {Recurrence} from "../../types/domain.ts";
 import type {UpdateRecurrenceDto} from "../../types/recurrence.ts";
@@ -10,42 +10,58 @@ import Checkbox from "../../components/Checkbox";
 import {SubtaskAdder} from "../../components/Adder";
 import {RiDeleteBin5Line} from "react-icons/ri";
 import {MdLoop, MdOutlineDateRange, MdWarningAmber} from "react-icons/md";
-import {updateRecurrence} from "../../api"; // ✅ make sure this function exists
+import {deleteRecurrence, getRecurrence, updateRecurrence} from "../../api"; // ✅ make sure this function exists
 
 export default function EditRecurrence() {
   const {recurrenceId} = useParams<{ recurrenceId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // TODO: Fetch this from backend by recurrenceId
-  const recurrence: Recurrence = {
-    id: recurrenceId || "rec-123",
-    startDate: "2025-06-20",
-    endDate: "2025-12-20",
-    period: 7,
-    taskTemplate: {
-      title: "Weekly Report Task",
-      description: "Prepare and submit the weekly project report",
-      subtasks: [
-        {title: "Collect data", description: "Gather metrics"},
-        {title: "Write summary", description: "Summarize key points"},
-        {title: "Submit to manager", description: "Upload and notify"},
-      ]
-    }
+  const [recurrence, setRecurrence] = useState<Recurrence | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Editable fields
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [period, setPeriod] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [subtasks, setSubtasks] = useState<CreateSubtaskDto[]>([]);
+
+  useEffect(() => {
+    if (!recurrenceId) return;
+
+    getRecurrence(recurrenceId)
+        .then((res) => {
+          const r = res.data as Recurrence;
+          setRecurrence(r);
+          setStartDate(r.startDate);
+          setEndDate(r.endDate || "");
+          setPeriod(r.period.toString());
+          setTitle(r.taskTemplate.title);
+          setDescription(r.taskTemplate.description ?? "");
+          setSubtasks([...r.taskTemplate.subtasks ?? []]);
+        })
+        .catch((err) => {
+          setError("Failed to load recurrence.");
+          console.error(err);
+        })
+        .finally(() => setLoading(false));
+  }, [recurrenceId]);
+
+  const handleDelete = async () => {
+    if (!recurrenceId) return;
+    const confirmed = window.confirm("Are you sure you want to delete this recurrence?");
+    if (!confirmed) return;
+
+    await deleteRecurrence(recurrenceId);
+    navigate(location.state?.from ?? "/");
   };
-
-  // State
-  const [startDate, setStartDate] = useState(recurrence.startDate);
-  const [endDate, setEndDate] = useState(recurrence.endDate ?? "");
-  const [period, setPeriod] = useState(recurrence.period.toString());
-
-  const [title, setTitle] = useState(recurrence.taskTemplate.title);
-  const [description, setDescription] = useState(recurrence.taskTemplate.description ?? "");
-  const [subtasks, setSubtasks] = useState<CreateSubtaskDto[]>([...recurrence.taskTemplate.subtasks ?? []]);
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();
-    if (!recurrenceId) return;
+    if (!recurrenceId || !recurrence) return;
 
     const dto: UpdateRecurrenceDto = {};
 
@@ -65,9 +81,8 @@ export default function EditRecurrence() {
       navigate(location.state?.from ?? "/");
       return;
     }
-    console.log(dto);
-    await updateRecurrence(recurrenceId, dto);
 
+    await updateRecurrence(recurrenceId, dto);
     navigate(location.state?.from ?? "/");
   };
 
@@ -87,6 +102,10 @@ export default function EditRecurrence() {
     setSubtasks(prev => prev.filter((_, i) => i !== idx));
   };
 
+  // UI guard
+  if (loading) return <p style={{padding: "1rem"}}>Loading recurrence...</p>;
+  if (error) return <p style={{padding: "1rem", color: "red"}}>{error}</p>;
+
   return (
       <form onSubmit={handleSave}>
         <Container>
@@ -105,8 +124,7 @@ export default function EditRecurrence() {
               <button
                   type="button"
                   className="passive warning-hover clear"
-                  onClick={() => navigate(location.state?.from ?? "/")}
-                  // handle click => delete the recurrence, go back where you came from
+                  onClick={handleDelete}
               >
                 <RiDeleteBin5Line/>
               </button>

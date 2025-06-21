@@ -6,10 +6,25 @@ import {BiSolidEdit} from "react-icons/bi";
 import {MdLoop, MdOutlineDateRange, MdWarningAmber} from "react-icons/md";
 import Card, {MainContent} from "../../components/layout/Card";
 import {SubtaskCard} from "../../components/TaskCard";
+import {useEffect, useState} from "react";
+import {getTask} from "../../api";
 
 export default function TaskDetails() {
   const {taskId} = useParams<{ taskId: string }>();
   const navigate = useNavigate();
+  const [task, setTask] = useState<Task | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!taskId) return;
+    getTask(taskId)
+        .then((res) => setTask(res))
+        .catch((err) => {
+          console.error(err);
+          setError("Task not found.");
+        });
+  }, [taskId]);
+
 
   const handleEditClick = () => {
     if (!task.recurrence) {
@@ -19,31 +34,6 @@ export default function TaskDetails() {
       // recurrent ➜ ask user which way
       navigate(`/recurrences/${task.recurrence.id}/edit`);
     }
-  };
-
-  // TODO: Replace with API fetch by ID
-  const task: Task = {
-    id: taskId || "",
-    title: "Implement new feature X",
-    description: "Refactor module Y, add endpoints and update docs.",
-    dateAssigned: "2025-06-20",
-    dateDue: "2025-07-01",
-    completed: false,
-    subtasks: [
-      {
-        id: "sub-001",
-        title: "Write unit tests",
-        completed: false,
-        description: "Cover all new service methods with Jest"
-      },
-      {id: "sub-002", title: "Review PR #42", completed: true, description: "Ensure integration tests pass"},
-    ],
-    recurrence: {
-      id: "rec-100",
-      startDate: "2025-06-19",
-      endDate: "2025-12-31",
-      period: 7,
-    },
   };
 
   return (
