@@ -1,11 +1,10 @@
 import PrivateRoute from "./auth/PrivateRoute.tsx";
-import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {AuthProvider} from "./auth/AuthProvider.tsx";
 import Callback from "./pages/Callback";
 import TasksByDate from "./pages/TasksByDate";
 import NewTask from "./pages/NewTask"
 import TaskDetails from "./pages/TaskDetails";
-import EditTask from "./pages/EditTask";
 import EditRecurrence from "./pages/EditRecurrence";
 
 const App = () => {
@@ -15,27 +14,36 @@ const App = () => {
           <Routes>
 
             {/* redirect root → today’s date view */}
-            <Route path="/" element={<Navigate to={`/date/${new Date().toISOString().slice(0, 10)}`} replace/>}/>
+            <PrivateRoute>
+              <Route path="/" element={<Navigate to={`/date/${new Date().toISOString().slice(0, 10)}`} replace/>}/>
+            </PrivateRoute>
 
             {/* top-level date route: /date/2025-06-17 */}
-            <Route path="date/:date" element={<TasksByDate/>}/>
+            <PrivateRoute>
+              <Route path="date/:date" element={<TasksByDate/>}/>
+            </PrivateRoute>
 
             {/*/!* other task views under /tasks *!/*/}
             <Route path="tasks">
-            {/*  <Route path="due" element={<TasksByDue/>}/>*/}
-            {/*  <Route path="unassigned" element={<UnassignedTasks/>}/>*/}
-              <Route path="new" element={<NewTask/>}/>
+              {/*  <Route path="due" element={<TasksByDue/>}/>*/}
+              {/*  <Route path="unassigned" element={<UnassignedTasks/>}/>*/}
+              <PrivateRoute>
+                <Route path="new" element={<NewTask/>}/>
+              </PrivateRoute>
 
               {/* per-task details & edit */}
               <Route path=":taskId">
-                <Route index element={<TaskDetails/>}/>
-                {/*<Route path="edit" element={<EditTask/>}/>*/}
+                <PrivateRoute>
+                  <Route index element={<TaskDetails/>}/>
+                </PrivateRoute>
               </Route>
             </Route>
 
             <Route path="recurrences">
               <Route path=":recurrenceId">
-                <Route path="edit" element={<EditRecurrence/>}/>
+                <PrivateRoute>
+                  <Route path="edit" element={<EditRecurrence/>}/>
+                </PrivateRoute>
               </Route>
             </Route>
 
