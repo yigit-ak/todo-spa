@@ -6,7 +6,7 @@ import {getDateContainerHead} from "../../util/dateUtil.ts";
 import TaskCard from "../../components/TaskCard";
 import {TaskAdder} from "../../components/Adder";
 import type {CreateTaskDto} from "../../types/task.ts";
-import {createTask} from "../../api";
+import {createTask, getTasksByDate} from "../../api";
 
 export default function TasksByDate() {
   const {date} = useParams<{ date: string }>();
