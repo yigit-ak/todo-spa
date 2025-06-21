@@ -10,6 +10,18 @@ export interface Recurrence {
   startDate: string;        // ISO yyyy-mm-dd
   endDate?: string | null;
   period: number;           // days
+  taskTemplate: RecurrentTaskTemplate;
+}
+
+export interface RecurrentTaskTemplate {
+  title: string;
+  description?: string;
+  subtasks?: RecurrentSubtaskTemplate[];
+}
+
+export interface RecurrentSubtaskTemplate {
+  title: string;
+  description?: string;
 }
 
 export interface Task {
@@ -20,5 +32,10 @@ export interface Task {
   dateDue?: string;
   completed: boolean;
   subtasks: Subtask[];
-  recurrence?: Recurrence;
+  recurrence?: {
+    id: string;
+    startDate: string;        // ISO yyyy-mm-dd
+    endDate?: string | null;
+    period: number;           // days
+  };
 }

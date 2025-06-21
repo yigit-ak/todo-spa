@@ -11,6 +11,16 @@ export default function TaskDetails() {
   const {taskId} = useParams<{ taskId: string }>();
   const navigate = useNavigate();
 
+  const handleEditClick = () => {
+    if (!task.recurrence) {
+      // plain task ➜ straight to task edit
+      navigate(`/tasks/${task.id}/edit`);
+    } else {
+      // recurrent ➜ ask user which way
+      navigate(`/recurrences/${task.recurrence.id}/edit`);
+    }
+  };
+
   // TODO: Replace with API fetch by ID
   const task: Task = {
     id: taskId || "",
@@ -46,7 +56,7 @@ export default function TaskDetails() {
           <HeadSideContent>
             <button
                 className="passive info-hover clear"
-                onClick={() => navigate(`/tasks/${taskId}/edit`)}
+                onClick={handleEditClick}
                 title="Edit task"
             >
               <BiSolidEdit/>

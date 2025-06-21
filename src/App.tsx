@@ -6,6 +6,7 @@ import TasksByDate from "./pages/TasksByDate";
 import NewTask from "./pages/NewTask"
 import TaskDetails from "./pages/TaskDetails";
 import EditTask from "./pages/EditTask";
+import EditRecurrence from "./pages/EditRecurrence";
 
 const App = () => {
   return (
@@ -28,7 +29,13 @@ const App = () => {
               {/* per-task details & edit */}
               <Route path=":taskId">
                 <Route index element={<TaskDetails/>}/>
-                <Route path="edit" element={<EditTask/>}/>
+                {/*<Route path="edit" element={<EditTask/>}/>*/}
+              </Route>
+            </Route>
+
+            <Route path="recurrences">
+              <Route path=":recurrenceId">
+                <Route path="edit" element={<EditRecurrence/>}/>
               </Route>
             </Route>
 
