@@ -1,11 +1,17 @@
 import "./Checkbox.scss";
 import TickIcon from "../../assets/TickIcon.tsx";
+import type {Task} from "../../types/domain.ts";
+import {toggleTaskCompleted} from "../../api";
 
-const Checkbox = () => {
+interface Props {
+  completed: boolean;
+}
+
+const Checkbox = ({completed, ...res}: Props) => {
+
   return (
-      <div className="checkbox">
+      <div className={`checkbox ${completed ? "completed" : ""}`} {...res}>
         <TickIcon/>
-        {/*todo solve the error*/}
       </div>
   );
 };

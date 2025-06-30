@@ -20,7 +20,7 @@ axiosInstance.interceptors.request.use(async (config) => {
 export async function handleRequest<T>(fn: () => Promise<{ data: T }>): Promise<T> {
   try {
     const res = await fn();
-    return res.data;
+    return res.data ;
   } catch (err: any) {
     console.error("API call failed:", err);
     throw new Error(err.response?.data || err.message);

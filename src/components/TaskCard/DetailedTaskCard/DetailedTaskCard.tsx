@@ -8,24 +8,45 @@ import {SubtaskCard} from "../index.ts";
 import "./DetailedTaskCard.scss";
 import {MdLoop, MdWarningAmber} from "react-icons/md";
 import {getRelativeDueDate} from "../../../util/dateUtil.ts";
+import {useState} from "react";
+import {toggleTaskCompleted} from "../../../api";
+import {useNavigate} from "react-router-dom";
 
 interface Props {
   task: Task
 }
 
 export default function DetailedTaskCard({task, ...res}: Props) {
+  const [completed, setCompleted] = useState<boolean>(task.completed);
+  const navigate = useNavigate();
+
+  function toggleCompleted() {
+    setCompleted(prev => !prev);
+    toggleTaskCompleted(task.id);
+  }
+
+  function goEdit() {
+    if (!task.recurrence) {
+      // one-off task → go to task-edit
+      navigate(`/tasks/${task.id}/edit`);
+    } else {
+      // recurring task → go to recurrence-edit
+      navigate(`/recurrences/${(task.recurrence as Recurrence).id}/edit`);
+    }
+  }
+
   const recurrence = task.recurrence;
   return (
       <div className="detailed-task-card" {...res} >
 
         <div className="header">
           <MainContent>
-            <Checkbox/>
+            <Checkbox completed={completed} onClick={toggleCompleted}/>
             <span>{task.title}</span>
           </MainContent>
 
           <SideContent>
-            <BiSolidEdit/>
+            <BiSolidEdit onClick={goEdit}/>
           </SideContent>
         </div>
 

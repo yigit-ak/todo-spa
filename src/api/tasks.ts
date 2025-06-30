@@ -15,7 +15,7 @@ export function getTask(id: string) {
 }
 
 export function createTask(task: CreateTaskDto) {
-  return handleRequest<Task>(() =>
+  return handleRequest<>(() =>
       axiosInstance.post("/tasks", task)
   );
 }

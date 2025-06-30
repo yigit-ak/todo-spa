@@ -6,6 +6,7 @@ import TasksByDate from "./pages/TasksByDate";
 import NewTask from "./pages/NewTask"
 import TaskDetails from "./pages/TaskDetails";
 import EditRecurrence from "./pages/EditRecurrence";
+import EditTask from "./pages/EditTask";
 
 const App = () => {
   return (
@@ -14,36 +15,29 @@ const App = () => {
           <Routes>
 
             {/* redirect root → today’s date view */}
-            <PrivateRoute>
-              <Route path="/" element={<Navigate to={`/date/${new Date().toISOString().slice(0, 10)}`} replace/>}/>
-            </PrivateRoute>
+              <Route path="/" element={
+                <Navigate to={`/date/${new Date().toISOString().slice(0, 10)}`} replace/>
+              }/>
 
             {/* top-level date route: /date/2025-06-17 */}
-            <PrivateRoute>
-              <Route path="date/:date" element={<TasksByDate/>}/>
-            </PrivateRoute>
+              <Route path="date/:date" element={<PrivateRoute><TasksByDate/></PrivateRoute>}/>
 
             {/*/!* other task views under /tasks *!/*/}
             <Route path="tasks">
               {/*  <Route path="due" element={<TasksByDue/>}/>*/}
               {/*  <Route path="unassigned" element={<UnassignedTasks/>}/>*/}
-              <PrivateRoute>
-                <Route path="new" element={<NewTask/>}/>
-              </PrivateRoute>
+                <Route path="new" element={<PrivateRoute><NewTask/></PrivateRoute>}/>
 
               {/* per-task details & edit */}
               <Route path=":taskId">
-                <PrivateRoute>
-                  <Route index element={<TaskDetails/>}/>
-                </PrivateRoute>
+                  <Route index element={<PrivateRoute><TaskDetails/></PrivateRoute>}/>
+                <Route path="edit" element={<PrivateRoute><EditTask/></PrivateRoute>}/>
               </Route>
             </Route>
 
             <Route path="recurrences">
               <Route path=":recurrenceId">
-                <PrivateRoute>
-                  <Route path="edit" element={<EditRecurrence/>}/>
-                </PrivateRoute>
+                  <Route path="edit" element={<PrivateRoute><EditRecurrence/></PrivateRoute>}/>
               </Route>
             </Route>
 

@@ -1,4 +1,4 @@
-import {FormEvent, useCallback, useState} from "react";
+import {FormEvent, useCallback, useEffect, useState} from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import Container, {Body, Head, HeadMainContent, HeadSideContent,} from "../../components/layout/Container";
 import Card, {MainContent, SideContent} from "../../components/layout/Card";
@@ -6,10 +6,10 @@ import {RiDeleteBin5Line} from "react-icons/ri";
 import {MdLoop, MdOutlineDateRange, MdWarningAmber} from "react-icons/md";
 import Checkbox from "../../components/Checkbox";
 import {SubtaskAdder} from "../../components/Adder";
-import {createSubtask, deleteSubtask, updateSubtask, updateTask,} from "../../api";
+import {createSubtask, deleteSubtask, getTask, updateSubtask, updateTask,} from "../../api";
 import type {UpdateTaskDto} from "../../types/task.ts";
 import type {UpdateSubtaskDto} from "../../types/subtask.ts";
-import type {Task} from "../../types/domain.ts";
+import type {Subtask, Task} from "../../types/domain.ts";
 
 // ──────────────────────────────────────────────────────────
 //  Local task seed (will later be replaced with a real fetch)
@@ -18,80 +18,105 @@ export default function EditTask() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ----- local “task” object -----
-  const task: Task = {
-    id: taskId || "",
-    title: "Implement new feature X",
-    description: "Refactor module Y, add endpoints and update docs.",
-    dateAssigned: "2025-06-20",
-    dateDue: "2025-07-01",
-    completed: false,
-    subtasks: [
-      {
-        id: "sub-001",
-        title: "Write unit tests",
-        completed: false,
-        description: "Cover all new service methods with Jest",
-      },
-      {
-        id: "sub-002",
-        title: "Review PR #42",
-        completed: true,
-        description: "Ensure integration tests pass",
-      },
-    ],
-    recurrence: {
-      id: "rec-100",
-      startDate: "2025-06-19",
-      endDate: "2025-12-31",
-      period: 7,
-    },
-  };
+  const [taskData, setTaskData] = useState<Task | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // ----- task-level state -----
-  const [title, setTitle] = useState(task.title);
-  const [description, setDescription] = useState(task.description);
-  const [dateAssigned, setDateAssigned] = useState(task.dateAssigned);
-  const [dateDue, setDateDue] = useState(task.dateDue);
+  // ─── Form fields ──────────────────────────────
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [dateAssigned, setDateAssigned] = useState<string>("");
+  const [dateDue, setDateDue] = useState<string>("");
 
-  // ----- sub-tasks state -----
-  const [subtasks, setSubtasks] = useState([...task.subtasks]);
+  // ─── Subtasks list ────────────────────────────
+  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
 
-  /*──────────────── helpers ────────────────*/
+  // ─── Fetch the real task on mount ─────────────
+  useEffect(() => {
+    if (!taskId) return;
+    setLoading(true);
+
+    getTask(taskId)
+        .then((t) => {
+          setTaskData(t);
+          setTitle(t.title);
+          setDescription(t.description ?? "");
+          setDateAssigned(t.dateAssigned ?? "");
+          setDateDue(t.dateDue ?? "");
+          setSubtasks(t.subtasks ?? []);
+          setError(null);
+        })
+        .catch((err) => {
+          console.error(err);
+          setError("Failed to load task.");
+        })
+        .finally(() => setLoading(false));
+  }, [taskId]);
+
+  if (loading)
+    return <p style={{ padding: "1rem" }}>Loading task…</p>;
+  if (error)
+    return (
+        <p style={{ padding: "1rem", color: "red" }}>
+          {error}
+        </p>
+    );
+  if (!taskData)
+    return <p style={{ padding: "1rem" }}>No task found.</p>;
+
+  // ─── Build a diff only for changed fields ──────
   const buildTaskDiff = (): UpdateTaskDto => {
     const diff: UpdateTaskDto = {};
-
-    if (title !== task.title) diff.title = title;
-    if (description !== task.description) diff.description = description;
-    if (dateAssigned !== task.dateAssigned) diff.dateAssigned = dateAssigned || undefined;
-    if (dateDue !== task.dateDue) diff.dateDue = dateDue || undefined;
-    /* completed intentionally skipped */
-
+    if (title !== taskData.title) diff.title = title;
+    if (description !== (taskData.description ?? ""))
+      diff.description = description;
+    if (
+        dateAssigned !== (taskData.dateAssigned ?? "")
+    )
+      diff.dateAssigned =
+          dateAssigned || undefined;
+    if (dateDue !== (taskData.dateDue ?? ""))
+      diff.dateDue = dateDue || undefined;
     return diff;
   };
 
+
   const formIsValid = () => title.trim().length > 0;
 
+
+  // ─── Save handler ─────────────────────────────
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();
-    if (!taskId) return;
+    if (!taskData) return;
 
     const dto = buildTaskDiff();
-    // If nothing changed, just go back.
+    // nothing changed → just go back
     if (Object.keys(dto).length === 0) {
       navigate(location.state?.from ?? "/");
       return;
     }
 
-    await updateTask(taskId, dto);
-    navigate(location.state?.from ?? "/");
+    try {
+      await updateTask(taskData.id, dto);
+      navigate(location.state?.from ?? "/");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update task. Try again.");
+    }
   };
 
-  /*──────────── sub-task CRUD ────────────*/
-  const addSubtask = async (stTitle: string) => {
-    if (!taskId) return;
-    const newSub = await createSubtask(taskId, {title: stTitle});
-    setSubtasks((prev) => [...prev, newSub]);
+  // ─── Sub‐task CRUD ────────────────────────────
+  const addSubtask = async (title: string) => {
+    if (!taskData) return;
+    try {
+      const newSub = await createSubtask(taskData.id, {
+        title
+      });
+      setSubtasks((prev) => [...prev, newSub]);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add subtask.");
+    }
   };
 
   const handleSubtaskChange = useCallback(
@@ -101,31 +126,39 @@ export default function EditTask() {
           value: string | boolean
       ) => {
         setSubtasks((prev) => {
-          const clone = [...prev];
-          const old = clone[idx];
-
-          // nothing to do
-          if (!old || old[field as keyof typeof old] === value) return prev;
-
-          clone[idx] = {...old, [field]: value};
-          return clone;
+          const copy = [...prev];
+          const old = copy[idx];
+          if (!old || old[field as any] === value)
+            return prev;
+          copy[idx] = { ...old, [field]: value };
+          return copy;
         });
 
-        // Fire-and-forget API call (no await → UI stays responsive)
-        if (taskId) {
-          const dto: UpdateSubtaskDto = {[field]: value} as UpdateSubtaskDto;
-          updateSubtask(taskId, subtasks[idx].id, dto).catch(console.error);
+        // fire‐and‐forget
+        if (taskData) {
+          const dto = { [field]: value } as UpdateSubtaskDto;
+          updateSubtask(
+              taskData.id,
+              subtasks[idx].id,
+              dto
+          ).catch(console.error);
         }
       },
-      [subtasks, taskId]
+      [subtasks, taskData]
   );
 
   const removeSubtask = async (idx: number) => {
+    if (!taskData) return;
     const st = subtasks[idx];
-    if (!taskId || !st) return;
-
-    await deleteSubtask(taskId, st.id);
-    setSubtasks((prev) => prev.filter((_, i) => i !== idx));
+    try {
+      await deleteSubtask(taskData.id, st.id);
+      setSubtasks((prev) =>
+          prev.filter((_, i) => i !== idx)
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete subtask.");
+    }
   };
 
   /*──────────────── UI ────────────────*/

@@ -7,6 +7,7 @@ import "./TaskCard.scss";
 import {useState} from "react";
 import DetailedTaskCard from "./DetailedTaskCard";
 import {getDayDifference} from "../../util/dateUtil.ts";
+import {toggleTaskCompleted} from "../../api";
 
 interface Props {
   task: Task;
@@ -15,9 +16,15 @@ interface Props {
 
 export default function TaskCard({task}: Props) {
   const [detailedView, setDetailedView] = useState<boolean>(false);
+  const [completed, setCompleted] = useState<boolean>(task.completed);
 
-  let className = `task-card ${task.completed && 'completed'}`;
-  className += !task.completed && task.dateDue && (getDayDifference(new Date(task.dateDue)) >= 0) ? ' warning' : "";
+  let className = `task-card ${completed && 'completed'}`;
+  className += !completed && task.dateDue && (getDayDifference(new Date(task.dateDue)) >= 0) ? ' warning' : "";
+
+  async function toggleCompleted() {
+    await toggleTaskCompleted(task.id);
+    setCompleted(prev => !prev);
+  }
 
   function toggleDetailedView() {
     setDetailedView(prev => !prev);
@@ -29,7 +36,7 @@ export default function TaskCard({task}: Props) {
       <Card className={className} onDoubleClick={toggleDetailedView}>
 
         <MainContent>
-          <Checkbox/>
+          <Checkbox completed={completed} onClick={toggleCompleted}/>
           <span>{task.title}</span>
         </MainContent>
 
