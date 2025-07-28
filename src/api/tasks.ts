@@ -1,5 +1,5 @@
-import axiosInstance, { handleRequest } from "./client";
-import type { Task } from "../types/domain";
+import axiosInstance, {handleRequest} from "./client";
+import type {Task} from "../types/domain";
 import type {CreateTaskDto, UpdateTaskDto} from "../types/task.ts";
 
 export function getTasksForToday() {
@@ -15,7 +15,7 @@ export function getTask(id: string) {
 }
 
 export function createTask(task: CreateTaskDto) {
-  return handleRequest<>(() =>
+  return handleRequest<Task>(() =>
       axiosInstance.post("/tasks", task)
   );
 }

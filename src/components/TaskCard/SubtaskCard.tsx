@@ -1,4 +1,4 @@
-import {Subtask, Task} from "../../types/domain.ts";
+import type {Subtask, Task} from "../../types/domain.ts";
 import Card, {MainContent} from "../layout/Card";
 import Checkbox from "../Checkbox";
 import {toggleSubtaskCompleted} from "../../api";
@@ -8,6 +8,7 @@ interface Props {
   parent: Task;
   task: Subtask;
   key: string;
+  onClick?: () => void;
 }
 
 export default function SubtaskCard({parent, task}: Props) {

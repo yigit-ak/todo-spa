@@ -1,10 +1,9 @@
 import "./Checkbox.scss";
 import TickIcon from "../../assets/TickIcon.tsx";
-import type {Task} from "../../types/domain.ts";
-import {toggleTaskCompleted} from "../../api";
 
 interface Props {
   completed: boolean;
+  onClick?: () => void;
 }
 
 const Checkbox = ({completed, ...res}: Props) => {

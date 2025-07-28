@@ -1,20 +1,22 @@
-import axiosInstance, { handleRequest } from "./client";
-import type { Recurrence } from "../types/domain";
+import axiosInstance, {handleRequest} from "./client";
+import type {Recurrence} from "../types/domain";
 import type {CreateRecurrenceDto, UpdateRecurrenceDto} from "../types/recurrence.ts";
 
-export function getRecurrence(id: string) {
-  return handleRequest(()=>
+export function getRecurrence(id: string): Promise<Recurrence> {
+  return handleRequest<Recurrence>(() =>
       axiosInstance.get(`/recurrences/${id}`)
   );
 }
 
-export function createRecurrence(r: CreateRecurrenceDto) {
+export function createRecurrence(r: CreateRecurrenceDto): Promise<Recurrence> {
   return handleRequest<Recurrence>(() =>
       axiosInstance.post("/recurrences", r)
   );
 }
 
-export function updateRecurrence(id: string, updated: Partial<UpdateRecurrenceDto>) {
+export function updateRecurrence(id: string,
+                                 updated: Partial<UpdateRecurrenceDto>
+): Promise<Recurrence> {
   return handleRequest<Recurrence>(() =>
       axiosInstance.patch(`/recurrences/${id}`, updated)
   );
@@ -22,6 +24,6 @@ export function updateRecurrence(id: string, updated: Partial<UpdateRecurrenceDt
 
 export function deleteRecurrence(id: string) {
   return handleRequest<Recurrence>(() =>
-  axiosInstance.delete(`/recurrences/${id}`)
+      axiosInstance.delete(`/recurrences/${id}`)
   );
 }

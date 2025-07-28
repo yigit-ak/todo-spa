@@ -9,13 +9,15 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(async (config) => {
   const user = await userManager.getUser();
   if (user?.access_token) {
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${user.access_token}`,
-    };
+    // ensure headers object exists
+    config.headers = config.headers ?? {};
+    // assign just the Authorization header
+    (config.headers as Record<string, string>)['Authorization'] =
+        `Bearer ${user.access_token}`;
   }
   return config;
 });
+
 
 export async function handleRequest<T>(fn: () => Promise<{ data: T }>): Promise<T> {
   try {

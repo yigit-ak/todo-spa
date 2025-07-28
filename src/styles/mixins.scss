@@ -1,5 +1,5 @@
-@import "layout";
-@import "theme";
+@use "layout" as *;
+@use "theme" as *;
 
 @mixin card-body {
   display: flex;

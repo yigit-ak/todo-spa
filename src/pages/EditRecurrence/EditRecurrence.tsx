@@ -1,4 +1,5 @@
-import {FormEvent, useEffect, useState} from "react";
+import type {FormEvent} from "react";
+import {useEffect, useState} from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import type {Recurrence} from "../../types/domain.ts";
 import type {UpdateRecurrenceDto} from "../../types/recurrence.ts";
@@ -33,8 +34,7 @@ export default function EditRecurrence() {
     if (!recurrenceId) return;
 
     getRecurrence(recurrenceId)
-        .then((res) => {
-          const r = res.data as Recurrence;
+        .then((r: Recurrence) => {
           setRecurrence(r);
           setStartDate(r.startDate);
           setEndDate(r.endDate || "");
@@ -111,7 +111,7 @@ export default function EditRecurrence() {
         <Container>
           <Head>
             <HeadMainContent>
-              <Checkbox/>
+              <Checkbox completed={false}/>
               <input
                   type="text"
                   placeholder="Task title"
@@ -195,7 +195,7 @@ export default function EditRecurrence() {
             {subtasks.map((st, idx) => (
                 <Card key={idx}>
                   <MainContent>
-                    <Checkbox/>
+                    <Checkbox completed={false}/>
                     <input
                         type="text"
                         placeholder="Title"
@@ -215,7 +215,7 @@ export default function EditRecurrence() {
                 </Card>
             ))}
 
-            <SubtaskAdder add={({title}) => addSubtask(title)} />
+            <SubtaskAdder add={({title}) => addSubtask(title)}/>
 
             {/* Save */}
             <div style={{marginTop: "1rem"}}>

@@ -1,9 +1,9 @@
-import {useState, KeyboardEvent} from "react";
-
+import type {KeyboardEvent} from "react";
+import {useState} from "react";
 import Adder from "./Adder";
 import Card, {MainContent} from "../layout/Card";
-import Checkbox from "../Checkbox";
 import type {CreateSubtaskDto} from "../../types/subtask";
+import AddIcon from "../../assets/AddIcon.tsx";
 
 interface Props {
   add(subtask: CreateSubtaskDto): void;
@@ -35,7 +35,7 @@ export default function SubtaskAdder({add}: Props) {
       <Adder title="Add subtask">
         <Card className="adder">
           <MainContent>
-            <Checkbox/>
+            <AddIcon/>
             <input
                 type="text"
                 autoFocus

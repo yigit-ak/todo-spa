@@ -8,7 +8,7 @@ interface Props {
   title: string;
 }
 
-export default function Adder({children, title, add}: Props) {
+export default function Adder({children, title}: Props) {
   const [addMode, setAddMode] = useState(false);
   const toggleAddMode = () => setAddMode(prev => !prev);
 

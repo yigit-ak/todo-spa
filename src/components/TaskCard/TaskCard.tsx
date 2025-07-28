@@ -1,5 +1,5 @@
 import Card, {MainContent, SideContent} from "../layout/Card";
-import {Task} from "../../types/domain.ts";
+import type {Task} from "../../types/domain.ts";
 import {showHelperIcon} from "../../util/helperIconUtil.ts";
 import Checkbox from "../Checkbox";
 import {BiDetail} from "react-icons/bi";
@@ -12,6 +12,7 @@ import {toggleTaskCompleted} from "../../api";
 interface Props {
   task: Task;
   key: string;
+  onClick?: () => void;
 }
 
 export default function TaskCard({task}: Props) {

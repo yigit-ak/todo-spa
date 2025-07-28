@@ -13,7 +13,6 @@ export default function TaskDetails() {
   const {taskId} = useParams<{ taskId: string }>();
   const navigate = useNavigate();
   const [task, setTask] = useState<Task | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!taskId) return;
@@ -21,9 +20,10 @@ export default function TaskDetails() {
         .then((res) => setTask(res))
         .catch((err) => {
           console.error(err);
-          setError("Task not found.");
         });
   }, [taskId]);
+
+  if (!task) return (<p>No task found.</p>);
 
 
   const handleEditClick = () => {
@@ -40,7 +40,7 @@ export default function TaskDetails() {
       <Container>
         <Head>
           <HeadMainContent>
-            <Checkbox/>
+            <Checkbox completed={task.completed} />
             <span>{task.title}</span>
           </HeadMainContent>
           <HeadSideContent>
@@ -89,7 +89,7 @@ export default function TaskDetails() {
           </Card>
 
           {!!task.subtasks.length && task.subtasks.map(subtask => (
-              <SubtaskCard task={subtask} key={subtask.id}/>
+              <SubtaskCard task={subtask} parent={task} key={subtask.id}/>
               )
           )}
 

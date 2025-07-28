@@ -1,16 +1,14 @@
-import './Card.scss';
+import type {HTMLAttributes, ReactNode} from "react";
+import "./Card.scss";
 
-interface Props {
-  children: any;
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
   className?: string;
 }
 
-export default function Card({ children, className = '', ...rest }: Props) {
+export default function Card({children, className = "", ...rest}: Props & HTMLAttributes<HTMLDivElement>) {
   return (
-      <div
-          className={`card ${className}`}
-          {...rest}
-      >
+      <div className={`card ${className}`} {...rest}>
         {children}
       </div>
   );

@@ -1,9 +1,10 @@
-import {FormEvent, useCallback, useEffect, useState} from "react";
+import type {FormEvent} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import Container, {Body, Head, HeadMainContent, HeadSideContent,} from "../../components/layout/Container";
 import Card, {MainContent, SideContent} from "../../components/layout/Card";
 import {RiDeleteBin5Line} from "react-icons/ri";
-import {MdLoop, MdOutlineDateRange, MdWarningAmber} from "react-icons/md";
+import {MdOutlineDateRange, MdWarningAmber} from "react-icons/md";
 import Checkbox from "../../components/Checkbox";
 import {SubtaskAdder} from "../../components/Adder";
 import {createSubtask, deleteSubtask, getTask, updateSubtask, updateTask,} from "../../api";
@@ -54,15 +55,15 @@ export default function EditTask() {
   }, [taskId]);
 
   if (loading)
-    return <p style={{ padding: "1rem" }}>Loading task…</p>;
+    return <p style={{padding: "1rem"}}>Loading task…</p>;
   if (error)
     return (
-        <p style={{ padding: "1rem", color: "red" }}>
+        <p style={{padding: "1rem", color: "red"}}>
           {error}
         </p>
     );
   if (!taskData)
-    return <p style={{ padding: "1rem" }}>No task found.</p>;
+    return <p style={{padding: "1rem"}}>No task found.</p>;
 
   // ─── Build a diff only for changed fields ──────
   const buildTaskDiff = (): UpdateTaskDto => {
@@ -127,16 +128,16 @@ export default function EditTask() {
       ) => {
         setSubtasks((prev) => {
           const copy = [...prev];
-          const old = copy[idx];
-          if (!old || old[field as any] === value)
+          const old: any = copy[idx];
+          if (!old || old[field] === value)
             return prev;
-          copy[idx] = { ...old, [field]: value };
+          copy[idx] = {...old, [field]: value};
           return copy;
         });
 
         // fire‐and‐forget
         if (taskData) {
-          const dto = { [field]: value } as UpdateSubtaskDto;
+          const dto = {[field]: value} as UpdateSubtaskDto;
           updateSubtask(
               taskData.id,
               subtasks[idx].id,
@@ -167,7 +168,7 @@ export default function EditTask() {
         <Container>
           <Head>
             <HeadMainContent>
-              <Checkbox/>
+              <Checkbox completed={false}/>
               <input
                   type="text"
                   placeholder="Enter task title"
@@ -233,7 +234,7 @@ export default function EditTask() {
             {subtasks.map((st, idx) => (
                 <Card key={st.id}>
                   <MainContent>
-                    <Checkbox
+                    <Checkbox completed={st.completed}
                         // onChange={(checked) => todo handle later
                         //     handleSubtaskChange(idx, "completed", checked)
                         // }

@@ -1,9 +1,8 @@
+import type {ReactNode} from "react";
 import {createContext, useContext, useEffect, useState} from "react";
+import type {User} from "oidc-client-ts";
 import {UserManager, WebStorageStateStore} from "oidc-client-ts";
 import {oidcConfig} from "./authConfig.ts";
-
-import type { ReactNode } from "react";
-import type {  User } from "oidc-client-ts";
 
 // the state you store internally
 interface AuthState {
@@ -14,6 +13,7 @@ interface AuthState {
 // the full context value you expose to consumers
 interface AuthContextType extends AuthState {
   login(): void;
+
   logout(): void;
 }
 
@@ -26,7 +26,7 @@ export const userManager = new UserManager({
 });
 
 export function AuthProvider({children}: { children: ReactNode }) {
-  const [auth, setAuth] = useState<AuthState>({ user: null, loading: true });
+  const [auth, setAuth] = useState<AuthState>({user: null, loading: true});
 
   useEffect(() => {
     // 1) initial load (fast if user is in sessionStorage)
@@ -34,7 +34,8 @@ export function AuthProvider({children}: { children: ReactNode }) {
         .then((u) => setAuth({user: u, loading: false}));
 
     // 2) keep React state in-sync with oidc-client events
-    const onLoaded = (u) => setAuth({user: u, loading: false});
+    const onLoaded = (u: User | null) =>
+        setAuth({user: u, loading: false});
     const onSignedOut = () => setAuth({user: null, loading: false});
 
     userManager.events.addUserLoaded(onLoaded);
@@ -51,9 +52,9 @@ export function AuthProvider({children}: { children: ReactNode }) {
 
   return (
       <AuthContext.Provider value={{...auth, login, logout}}>
-  {children}
-  </AuthContext.Provider>
-);
+        {children}
+      </AuthContext.Provider>
+  );
 }
 
 export function useAuth(): AuthContextType {

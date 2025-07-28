@@ -1,5 +1,6 @@
-import {FormEvent, useState} from "react";
-import {useNavigate, useLocation, useSearchParams} from "react-router-dom";
+import type {FormEvent} from "react";
+import {useState} from "react";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import Container, {Body, Head, HeadMainContent, HeadSideContent} from "../../components/layout/Container";
 import AddIcon from "../../assets/AddIcon";
 import {RiDeleteBin5Line} from "react-icons/ri";
@@ -205,7 +206,7 @@ export default function NewTask() {
             {subtasks.map((st, idx) => (
                 <Card key={idx}>
                   <MainContent>
-                    <Checkbox/>
+                    <Checkbox completed={false}/>
                     <input type="text"
                            placeholder="Title"
                            value={st.title}

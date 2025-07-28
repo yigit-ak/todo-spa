@@ -1,9 +1,7 @@
-import type {Recurrence, Subtask, Task} from "../../../types/domain.ts";
-import Card, {MainContent, SideContent} from "../../layout/Card";
-import {Body} from "../../layout/Container";
+import type {Recurrence, Task} from "../../../types/domain.ts";
+import {MainContent, SideContent} from "../../layout/Card";
 import Checkbox from "../../Checkbox";
-import {showHelperIcon} from "../../../util/helperIconUtil.ts";
-import {BiDetail, BiSolidEdit} from "react-icons/bi";
+import {BiSolidEdit} from "react-icons/bi";
 import {SubtaskCard} from "../index.ts";
 import "./DetailedTaskCard.scss";
 import {MdLoop, MdWarningAmber} from "react-icons/md";
@@ -13,7 +11,9 @@ import {toggleTaskCompleted} from "../../../api";
 import {useNavigate} from "react-router-dom";
 
 interface Props {
-  task: Task
+  task: Task;
+  onClick?: () => void;
+  onDoubleClick?: () => void;
 }
 
 export default function DetailedTaskCard({task, ...res}: Props) {
@@ -70,7 +70,7 @@ export default function DetailedTaskCard({task, ...res}: Props) {
         {!!task.subtasks.length &&
             <div className="subtask-list">
               {task.subtasks.map(subtask => (
-                  <SubtaskCard task={subtask} key={subtask.id}/>
+                  <SubtaskCard task={subtask} parent={task} key={subtask.id}/>
               ))}
             </div>
         }

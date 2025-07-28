@@ -1,5 +1,5 @@
-@import "../../../styles/layout.scss";
-@import "../../../styles/theme.scss";
+@use "../../../styles/layout.scss" as *;
+@use "../../../styles/theme.scss" as *;
 
 .card {
   display: flex;

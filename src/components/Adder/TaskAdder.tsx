@@ -1,11 +1,12 @@
 import Adder from "./Adder.tsx";
 import Card, {MainContent, SideContent} from "../layout/Card";
-import Checkbox from "../Checkbox";
 import {HiOutlineArrowsExpand} from "react-icons/hi";
 import type {CreateTaskDto} from "../../types/task.ts";
-import type {FormEvent} from "react";
+import type {KeyboardEvent} from 'react';
 import {useState} from "react";
+
 import {Link} from "react-router-dom";
+import AddIcon from "../../assets/AddIcon.tsx";
 
 interface Props {
   dateAssigned?: string;
@@ -30,8 +31,8 @@ export default function TaskAdder({dateAssigned, add}: Props) {
   }
 
   // intercept Enter key on the text input
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key === "Enter") {
+  function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleSubmit();
     }
@@ -41,7 +42,7 @@ export default function TaskAdder({dateAssigned, add}: Props) {
       <Adder title="Add task">
         <Card className="adder">
           <MainContent>
-            <Checkbox/>
+            <AddIcon/>
             <input type="text"
                    name="title"
                    autoFocus

@@ -1,5 +1,5 @@
-@import "theme";
-@import "typography";
+@use "theme" as *;
+@use "typography" as *;
 
 * {
   flex-shrink: 0;
